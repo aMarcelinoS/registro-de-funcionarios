@@ -10,9 +10,9 @@ function fecthJson(url){
 }
 
 function listEmployees(){
-  fecthJson("http://localhost:3000/employees");
+  return fecthJson("http://localhost:3000/employees");
 }
 
 function listRoles(){
-  fecthJson("http://localhost:3000/roles");
+  return fecthJson("http://localhost:3000/roles");
 }
