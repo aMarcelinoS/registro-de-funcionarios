@@ -13,7 +13,8 @@ async function init(){
   renderData();
   clearSelection();
   bcancel.addEventListener("click", clearSelection);
-  formEl.addEventListener("submit", onSubmit)
+  formEl.addEventListener("submit", onSubmit);
+  bdelete.addEventListener("click", onDelete);
 }
 init();
 
@@ -45,6 +46,7 @@ function clearSelection(){
   bsubmit.textContent = "Create"
 }
 
+//Atualiza e cria item na lista
 async function onSubmit(evt){
   evt.preventDefault();
   const employeeData = {
@@ -68,6 +70,17 @@ async function onSubmit(evt){
       selectItem(createdItem, listEl.lastChild);
       listEl.lastChild.scrollIntoView();
     }
+  }
+}
+
+//Apaga item da lista
+async function onDelete(){
+  if(selectedItem){
+    await deleteEmployee(selectedItem.id); //<- Atualiza funcionário no back-end
+    const i = employees.indexOf(selectedItem);
+    employees.splice(i, 1);
+    renderData();
+    clearSelection();
   }
 }
 

@@ -35,3 +35,10 @@ function createEmployee(employee){
     body: JSON.stringify(employee),
   });
 }
+
+function deleteEmployee(id){
+  return fecthJson(`http://localhost:3000/employees/${id}`,{
+    method: "DELETE",
+  });
+}
+
