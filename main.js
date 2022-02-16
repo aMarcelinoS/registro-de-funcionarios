@@ -7,17 +7,13 @@ const bdelete = document.getElementById("bdelete");
 const bcancel = document.getElementById("bcancel");
 const bsubmit = document.getElementById("bsubmit")
 
-async function init(){
-  try{
-    [employees, roles] = await Promise.all([listEmployees(), listRoles()]);
-    renderRoles();
-    renderData();
-    clearSelection();
-    bcancel.addEventListener("click", clearSelection);
-    formEl.addEventListener("submit", onSubmit)
-  }catch(error){
-    showError("Error loading data", error);
-  }
+async function init(){  
+  [employees, roles] = await Promise.all([listEmployees(), listRoles()]);
+  renderRoles();
+  renderData();
+  clearSelection();
+  bcancel.addEventListener("click", clearSelection);
+  formEl.addEventListener("submit", onSubmit)
 }
 init();
 
@@ -56,7 +52,7 @@ async function onSubmit(evt){
     salary: formEl.salary.valueAsNumber,
     role_id: +formEl.role_id.value
   };
-  if(!employeeData.name || employeeData.salary || employeeData.role_id){
+  if(!employeeData.name || !employeeData.salary || !employeeData.role_id){
     showError("Cannot have empty fields");
   }else{
     if(selectedItem){

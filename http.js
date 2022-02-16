@@ -6,7 +6,10 @@ function fecthJson(url, options){
     }else{
       throw new Error(r.statusText);
     }
-  });
+  }).catch(error => {
+    showError("Error loading data", error);
+    throw error;
+  })
 }
 
 function listEmployees(){
