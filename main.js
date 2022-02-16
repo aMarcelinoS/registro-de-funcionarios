@@ -53,11 +53,19 @@ async function onSubmit(evt){
     salary: formEl.salary.valueAsNumber,
     role_id: +formEl.role_id.value
   };
-  const updatedItem = await updateEmployee(selectedItem.id, employeeData); //<- Atualiza funcionário no back-end
-  const i = employees.indexOf(selectedItem);
-  employees[i] = updatedItem;
-  renderData();
-  selectItem(updatedItem, listEl.children[i]);
+  if(selectedItem){
+    const updatedItem = await updateEmployee(selectedItem.id, employeeData); //<- Atualiza funcionário no back-end
+    const i = employees.indexOf(selectedItem);
+    employees[i] = updatedItem;
+    renderData();
+    selectItem(updatedItem, listEl.children[i]);
+  }else{
+    const createdItem = await createEmployee(employeeData);
+    employees.push(createdItem);
+    renderData();
+    selectItem(createdItem, listEl.lastChild);
+    listEl.lastChild.scrollIntoView();
+  }
 }
 
 //Gera a lista de funcionários

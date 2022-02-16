@@ -24,3 +24,11 @@ function updateEmployee(id, employee){
     body: JSON.stringify(employee),
   });
 }
+
+function createEmployee(employee){
+  return fecthJson(`http://localhost:3000/employees`,{
+    method: "POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(employee),
+  });
+}
