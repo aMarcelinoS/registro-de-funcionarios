@@ -1,5 +1,6 @@
 let employees = [];
 let roles = [];
+let selectedItem;
 const listEl = document.querySelector("ul");
 const formEl = document.querySelector("form");
 
@@ -13,6 +14,21 @@ async function init(){
 }
 init();
 
+//Seleciona item na lista
+function selectItem(employee, li){
+  clearSelection();
+  selectedItem =employee
+  li.classList.add("selected");
+}
+
+function clearSelection(){
+  selectedItem = undefined;
+  const li = listEl.querySelector(".selected");
+  if(li != null){
+    li.classList.remove("selected");
+  }
+}
+
 //Gera a lista de funcionários
 function renderData(){
    for(const employee of employees){
@@ -25,6 +41,8 @@ function renderData(){
     li.appendChild(divName);
     li.appendChild(divRole);
     listEl.appendChild(li);
+
+    li.addEventListener("click", () => selectItem(employee, li));
   }
 }
 
