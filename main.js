@@ -14,6 +14,7 @@ async function init(){
     renderData();
     clearSelection();
     bcancel.addEventListener("click", clearSelection);
+    formEl.addEventListener("submit", onSubmit)
   }catch(erro){
     showError(erro);
   }
@@ -45,8 +46,23 @@ function clearSelection(){
   bcancel.style.display = "none";
 }
 
+async function onSubmit(evt){
+  evt.preventDefault();
+  const employeeData = {
+    name: formEl.name.value,
+    salary: formEl.salary.valueAsNumber,
+    role_id: +formEl.role_id.value
+  };
+  const updatedItem = await updateEmployee(selectedItem.id, employeeData); //<- Atualiza funcionário no back-end
+  const i = employees.indexOf(selectedItem);
+  employees[i] = updatedItem;
+  renderData();
+  selectItem(updatedItem, listEl.children[i]);
+}
+
 //Gera a lista de funcionários
 function renderData(){
+   listEl.innerHTML = "";
    for(const employee of employees){
     let role = roles.find((role) => role.id == employee.role_id);
     const li = document.createElement("li");
@@ -62,6 +78,7 @@ function renderData(){
   }
 }
 
+//Gera lista de cargos no formulário
 function renderRoles(){
   for(const role of roles){
    
