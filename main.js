@@ -15,8 +15,8 @@ async function init(){
     clearSelection();
     bcancel.addEventListener("click", clearSelection);
     formEl.addEventListener("submit", onSubmit)
-  }catch(erro){
-    showError(erro);
+  }catch(error){
+    showError("Error loading data", error);
   }
 }
 init();
@@ -31,9 +31,11 @@ function selectItem(employee, li){
   formEl.role_id.value = employee.role_id;
   bdelete.style.display = "inline";
   bcancel.style.display = "inline";
+  bsubmit.textContent = "Update";
 }
 
 function clearSelection(){
+  clearError();
   selectedItem = undefined;
   const li = listEl.querySelector(".selected");
   if(li != null){
@@ -44,6 +46,7 @@ function clearSelection(){
   formEl.role_id.value = "";
   bdelete.style.display = "none";
   bcancel.style.display = "none";
+  bsubmit.textContent = "Create"
 }
 
 async function onSubmit(evt){
@@ -53,18 +56,22 @@ async function onSubmit(evt){
     salary: formEl.salary.valueAsNumber,
     role_id: +formEl.role_id.value
   };
-  if(selectedItem){
-    const updatedItem = await updateEmployee(selectedItem.id, employeeData); //<- Atualiza funcionário no back-end
-    const i = employees.indexOf(selectedItem);
-    employees[i] = updatedItem;
-    renderData();
-    selectItem(updatedItem, listEl.children[i]);
+  if(!employeeData.name || employeeData.salary || employeeData.role_id){
+    showError("Cannot have empty fields");
   }else{
-    const createdItem = await createEmployee(employeeData);
-    employees.push(createdItem);
-    renderData();
-    selectItem(createdItem, listEl.lastChild);
-    listEl.lastChild.scrollIntoView();
+    if(selectedItem){
+      const updatedItem = await updateEmployee(selectedItem.id, employeeData); //<- Atualiza funcionário no back-end
+      const i = employees.indexOf(selectedItem);
+      employees[i] = updatedItem;
+      renderData();
+      selectItem(updatedItem, listEl.children[i]);
+    }else{
+      const createdItem = await createEmployee(employeeData);
+      employees.push(createdItem);
+      renderData();
+      selectItem(createdItem, listEl.lastChild);
+      listEl.lastChild.scrollIntoView();
+    }
   }
 }
 
@@ -97,7 +104,13 @@ function renderRoles(){
  }
 }
 
-function showError(error){
-  document.getElementById("errors").textContent = "Erro ao carregar dados";
-  console.error(error);
+function showError(message, error){
+  document.getElementById("errors").textContent = message;
+  if(error){
+    console.error(error);
+  }
+}
+
+function clearError(){
+  document.getElementById("errors").textContent = "";
 }
