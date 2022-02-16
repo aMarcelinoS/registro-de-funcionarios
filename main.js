@@ -10,7 +10,9 @@ const bsubmit = document.getElementById("bsubmit")
 async function init(){
   try{
     [employees, roles] = await Promise.all([listEmployees(), listRoles()]);
+    renderRoles();
     renderData();
+    clearSelection();
     bcancel.addEventListener("click", clearSelection);
   }catch(erro){
     showError(erro);
@@ -18,7 +20,7 @@ async function init(){
 }
 init();
 
-//Seleciona item na lista
+//Seleciona e limpa a seleção de item na lista
 function selectItem(employee, li){
   clearSelection();
   selectedItem =employee
@@ -26,6 +28,8 @@ function selectItem(employee, li){
   formEl.name.value = employee.name;
   formEl.salary.valueAsNumber = employee.salary;
   formEl.role_id.value = employee.role_id;
+  bdelete.style.display = "inline";
+  bcancel.style.display = "inline";
 }
 
 function clearSelection(){
@@ -56,6 +60,16 @@ function renderData(){
 
     li.addEventListener("click", () => selectItem(employee, li));
   }
+}
+
+function renderRoles(){
+  for(const role of roles){
+   
+   const option = document.createElement("option");
+   option.textContent = role.name;
+   option.value = role.id;
+  formEl.role_id.appendChild(option);
+ }
 }
 
 function showError(error){
