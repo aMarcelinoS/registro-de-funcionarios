@@ -3,11 +3,15 @@ let roles = [];
 let selectedItem;
 const listEl = document.querySelector("ul");
 const formEl = document.querySelector("form");
+const bdelete = document.getElementById("bdelete");
+const bcancel = document.getElementById("bcancel");
+const bsubmit = document.getElementById("bsubmit")
 
 async function init(){
   try{
     [employees, roles] = await Promise.all([listEmployees(), listRoles()]);
     renderData();
+    bcancel.addEventListener("click", clearSelection);
   }catch(erro){
     showError(erro);
   }
@@ -19,6 +23,9 @@ function selectItem(employee, li){
   clearSelection();
   selectedItem =employee
   li.classList.add("selected");
+  formEl.name.value = employee.name;
+  formEl.salary.valueAsNumber = employee.salary;
+  formEl.role_id.value = employee.role_id;
 }
 
 function clearSelection(){
@@ -27,6 +34,11 @@ function clearSelection(){
   if(li != null){
     li.classList.remove("selected");
   }
+  formEl.name.value = "";
+  formEl.salary.value = "";
+  formEl.role_id.value = "";
+  bdelete.style.display = "none";
+  bcancel.style.display = "none";
 }
 
 //Gera a lista de funcionários
